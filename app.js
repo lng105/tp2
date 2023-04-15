@@ -5,11 +5,13 @@ mongoose.set("strictQuery", true);
 
 const HttpErreur = require("./models/http-erreur");
 const coursRoutes = require("./routes/cours-routes");
+const profRoutes = require("./routes/prof-routes");
 
 const app = express();
 app.use(bodyParser.json());
 
 app.use("/api/cours", coursRoutes);
+app.use("/api/prof", profRoutes);
 
 app.use((requete, reponse, next) => {
   return next(new HttpErreur("Route non trouvée", 404));

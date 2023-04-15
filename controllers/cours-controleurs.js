@@ -3,7 +3,6 @@ const { default: mongoose, mongo } = require("mongoose");
 const { v4: uuidv4 } = require("uuid");
 
 const HttpErreur = require("../models/http-erreur");
-
 const Cours = require("../models/cours");
 
 const getCoursById = async (requete, reponse, next) => {
@@ -21,7 +20,7 @@ const getCoursById = async (requete, reponse, next) => {
 };
 
 const creerCours = async (requete, reponse, next) => {
-  const { titre, description, createur } = requete.body;
+  const { titre, description } = requete.body;
   const nouvelleCours = new Cours({
     titre,
     description,
@@ -30,7 +29,7 @@ const creerCours = async (requete, reponse, next) => {
   try {
     await nouvelleCours.save();
   } catch (err) {
-    const erreur = new HttpErreur("Création de place échouée", 500);
+    const erreur = new HttpErreur("Création de cours échouée", 500);
     return next(erreur);
   }
 
