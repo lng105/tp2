@@ -20,10 +20,10 @@ const getProfById = async (requete, reponse, next) => {
   };
 
   const creerProf = async (requete, reponse, next) => {
-    const { prenom, nom } = requete.body;
+    const { nom, cours } = requete.body;
     const nouveauProf = new Prof({
-      prenom,
       nom,
+      cours:[],
     });
   
     try {
@@ -32,8 +32,7 @@ const getProfById = async (requete, reponse, next) => {
       const erreur = new HttpErreur("Création de prof échouée", 500);
       return next(erreur);
     }
-  
-    reponse.status(201).json({ prof: nouveauProf });
+    reponse.status(201).json({ prof: nouveauProf.toObject({getters:true}) });
   };
 
   const supprimerProf = async (requete, reponse, next) => {
@@ -43,29 +42,23 @@ const getProfById = async (requete, reponse, next) => {
         prof = await Prof.findByIdAndRemove(profId);
     } catch {
       return next(
-        new HttpErreur("Erreur lors de la suppression professeur", 500)
-      );
+        new HttpErreur("Erreur lors de la suppression professeur", 500));
     }
-  
     reponse.status(200).json({ message: "Professeur supprimée" });
   };
 
   const updateProf = async (requete, reponse, next) => {
-    const { prenom, nom } = requete.body;
+    const { nom } = requete.body;
     const profId = requete.params.profId;
     let prof;
   
     try {
       prof = await Prof.findById(profId);
-      prof.prenom = prenom;
       prof.nom = nom;
       await prof.save();
     } catch {
-      return next(
-        new HttpErreur("Erreur lors de la mise à jour du prof", 500)
-      );
+      return next(new HttpErreur("Erreur lors de la mise à jour du prof", 500));
     }
-  
     reponse.status(200).json({ prof: prof.toObject({ getters: true }) });
   };
 
