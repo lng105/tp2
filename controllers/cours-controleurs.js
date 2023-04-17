@@ -26,6 +26,7 @@ const creerCours = async (requete, reponse, next) => {
     titre,
     description,
     professeur,
+    numEtudiants:[],
   });
 
   let prof;
