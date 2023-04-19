@@ -4,6 +4,7 @@ const { v4: uuidv4 } = require("uuid");
 
 const HttpErreur = require("../models/http-erreur");
 const Prof = require("../models/prof");
+const Cours = require("../models/cours")
 
 const getProfById = async (requete, reponse, next) => {
     const profId = requete.params.profId;
@@ -20,10 +21,10 @@ const getProfById = async (requete, reponse, next) => {
   };
 
   const creerProf = async (requete, reponse, next) => {
-    const { nom, cours } = requete.body;
+    const { nom } = requete.body;
     const nouveauProf = new Prof({
       nom,
-      cours:[],
+      listeCours:[],
     });
   
     try {

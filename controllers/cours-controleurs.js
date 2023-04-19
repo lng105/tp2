@@ -26,7 +26,7 @@ const creerCours = async (requete, reponse, next) => {
     titre,
     description,
     professeur,
-    numEtudiants:[],
+    listeEtudiants:[],
   });
 
   let prof;
@@ -43,7 +43,7 @@ const creerCours = async (requete, reponse, next) => {
 
   try {
     await nouvelleCours.save();
-    prof.numCours.push(nouvelleCours);
+    prof.listeCours.push(nouvelleCours);
     await prof.save();
   } catch (err) {
     const erreur = new HttpErreur("Création de cours échouée2", 500);
@@ -68,7 +68,7 @@ const supprimerCours = async (requete, reponse, next) => {
       try{
         
         await Cours.findByIdAndDelete(coursId);
-        cours.professeur.numCours.pull(cours);
+        cours.professeur.listeCours.pull(cours);
         await cours.professeur.save()
 
       }catch{

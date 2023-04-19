@@ -24,7 +24,7 @@ const getEtudiantById = async (requete, reponse, next) => {
     const { nom } = requete.body;
     const nouveauEtudiant = new Etudiant({
       nom,
-      cours:[],
+      listeCours:[],
     });
   
     try {
@@ -64,21 +64,22 @@ const getEtudiantById = async (requete, reponse, next) => {
   };
 
   const inscription = async (requete, reponse, next) => {
-    const { numCours } = requete.body;
-    const etudiantId = requete.params.etudiantId;
-    let etudiant,cours;
-  
-    try {
-      etudiant = await Etudiant.findById(etudiantId);
-      etudiant.numCours = numCours;
-      cours.numEtudiants.push(numCours)
-      await cours.save()
+    const { listeCours } = requete.body;
+    const etudiantId = requete.params.etudiantId
+    const coursId = requete.params.coursId
+    let etudiant, cours;
 
+    try {
+      cours = await Cours.findById(coursId);
+      etudiant = await Etudiant.findById(etudiantId);
+      etudiant.listeCours = listeCours;
       await etudiant.save();
+      cours.listeEtudiants.push(etudiant.uuidv4)
+      await cours.save()
     } catch {
       return next(new HttpErreur("Erreur lors de l'ajout du cours'", 500));
     }
-    reponse.status(200).json({ etudiant: etudiant.toObject({ getters: true }) });
+    reponse.status(200).json({ message: "Cours ajouter" });
   };
 
   exports.getEtudiantById = getEtudiantById;
